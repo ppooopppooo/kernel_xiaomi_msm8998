@@ -3728,23 +3728,6 @@ static int mdss_dsi_ctrl_probe(struct platform_device *pdev)
 
 	mdss_dsi_debug_bus_init(mdss_dsi_res);
 
-	init_completion(&ctrl_pdata->wake_comp);
-	init_waitqueue_head(&ctrl_pdata->wake_waitq);
-	ctrl_pdata->wake_thread =
-		kthread_run_perf_critical(mdss_dsi_disp_wake_thread,
-					  ctrl_pdata, "mdss_display_wake");
-	if (IS_ERR(ctrl_pdata->wake_thread)) {
-		rc = PTR_ERR(ctrl_pdata->wake_thread);
-		pr_err("%s: Failed to start display wake thread, rc=%d\n",
-		       __func__, rc);
-		goto error_shadow_clk_deinit;
-	}
-
-	/* It's sad but not fatal for the fb client register to fail */
-	ctrl_pdata->wake_notif.notifier_call = mdss_dsi_fb_unblank_cb;
-	ctrl_pdata->wake_notif.priority = INT_MAX;
-	fb_register_client(&ctrl_pdata->wake_notif);
-
 	return 0;
 
 error_shadow_clk_deinit:
@@ -4212,8 +4195,6 @@ static int mdss_dsi_ctrl_remove(struct platform_device *pdev)
 		return -ENODEV;
 	}
 
-	fb_unregister_client(&ctrl_pdata->wake_notif);
-	kthread_stop(ctrl_pdata->wake_thread);
 	mdss_dsi_pm_qos_remove_request(ctrl_pdata->shared_data);
 
 	if (msm_dss_config_vreg(&pdev->dev,
