@@ -43,6 +43,13 @@
 
 #define DEFAULT_BUS_P 25
 
+/*
+ * The effective duration of qos request in usecs. After
+ * timeout, qos request is cancelled automatically.
+ * Kept 80ms default, inline with default GPU idle time.
+ */
+#define KGSL_L2PC_CPU_TIMEOUT	(64 * 1000)
+
 /* Order deeply matters here because reasons. New entries go on the end */
 static const char * const clocks[] = {
 	"src_clk",
