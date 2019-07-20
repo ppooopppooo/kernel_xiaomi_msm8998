@@ -906,7 +906,7 @@ QDF_STATUS hdd_debugfs_init(hdd_adapter_t *adapter)
 	if (NULL == adapter->debugfs_phy)
 		return QDF_STATUS_E_FAILURE;
 
-	if (IS_ENABLED(CONFIG_BOARD_MUSKIE) || IS_ENABLED(CONFIG_BOARD_TAIMEN))
+	if (IS_ENABLED(CONFIG_MACH_SAGIT))
 		return wlan_hdd_init_power_stats_debugfs(adapter);
 
 	if (NULL == debugfs_create_file("wow_enable", 00400 | 00200,
