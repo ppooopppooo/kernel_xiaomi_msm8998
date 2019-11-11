@@ -355,7 +355,7 @@ enum hdd_dot11_mode {
  * gChannelBondingMode5GHz - Configures Channel Bonding in 5 GHz
  * @Min: 0
  * @Max: 10
- * @Default: 0
+ * @Default: 1
  *
  * This ini is used to set default channel bonding mode 5GHZ
  *
