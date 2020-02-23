@@ -37,11 +37,7 @@ static gfp_t high_order_gfp_flags = (GFP_HIGHUSER | __GFP_NOWARN |
 static gfp_t low_order_gfp_flags  = (GFP_HIGHUSER | __GFP_NOWARN);
 
 #ifndef CONFIG_ALLOC_BUFFERS_IN_4K_CHUNKS
-#if defined(CONFIG_IOMMU_IO_PGTABLE_ARMV7S)
-static const unsigned int orders[] = {8, 4, 0};
-#else
-static const unsigned int orders[] = {9, 4, 0};
-#endif
+static const unsigned int orders[] = {4, 0};
 #else
 static const unsigned int orders[] = {0};
 #endif
@@ -352,7 +348,7 @@ static int ion_system_heap_allocate(struct ion_heap *heap,
 	struct sg_table table_sync;
 	struct scatterlist *sg;
 	struct scatterlist *sg_sync;
-	int ret = 0;
+	int ret;
 	struct list_head pages;
 	struct list_head pages_from_pool;
 	struct page_info *info, *tmp_info;
@@ -486,7 +482,7 @@ static int ion_system_heap_allocate(struct ion_heap *heap,
 
 err_free_sg2:
 	/* We failed to zero buffers. Bypass pool */
-	buffer->private_flags |= ION_PRIV_FLAG_SHRINKER_FREE;
+	buffer->flags |= ION_PRIV_FLAG_SHRINKER_FREE;
 
 	if (vmid > 0)
 		ion_system_secure_heap_unassign_sg(table, vmid);
