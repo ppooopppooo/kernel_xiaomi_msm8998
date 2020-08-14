@@ -12,7 +12,6 @@
 struct vmpressure {
 	unsigned long scanned;
 	unsigned long reclaimed;
-	unsigned long stall;
 	/* The lock is used to keep the scanned/reclaimed above in sync. */
 	struct spinlock sr_lock;
 
@@ -29,8 +28,7 @@ struct mem_cgroup;
 extern int vmpressure_notifier_register(struct notifier_block *nb);
 extern int vmpressure_notifier_unregister(struct notifier_block *nb);
 extern void vmpressure(gfp_t gfp, struct mem_cgroup *memcg,
-		       unsigned long scanned, unsigned long reclaimed,
-		       int order);
+		       unsigned long scanned, unsigned long reclaimed);
 extern void vmpressure_prio(gfp_t gfp, struct mem_cgroup *memcg, int prio);
 
 #ifdef CONFIG_MEMCG
