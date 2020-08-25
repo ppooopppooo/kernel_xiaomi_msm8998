@@ -42,6 +42,8 @@
 #include "adreno-gpulist.h"
 #include "adreno_dispatch.h"
 
+#include <soc/qcom/boot_stats.h>
+
 #undef MODULE_PARAM_PREFIX
 #define MODULE_PARAM_PREFIX "adreno."
 
@@ -1035,6 +1037,9 @@ static int adreno_probe(struct platform_device *pdev)
 		}
 	}
 #endif
+
+	place_marker("M - DRIVER GPU Ready");
+
 out:
 	if (status) {
 		adreno_ringbuffer_close(adreno_dev);
