@@ -22,7 +22,6 @@
 #include "msm8998-mdss-panels.dtsi"
 #include "msm8998-audio.dtsi"
 #include "msm8998-mdss.dtsi"
-#include "msm8998-common-mtp.dtsi"
 
 #include "sagit-camera-sensor-mtp.dtsi"
 
@@ -106,6 +105,13 @@
 	qcom,bus-speed-mode = "SDR12", "SDR25", "SDR50", "DDR50", "SDR104";
 
 	cd-gpios = <&tlmm 95 0x1>;
+
+	status = "ok";
+};
+
+&uartblsp2dm1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart_console_active>;
 
 	status = "ok";
 };
@@ -412,6 +418,14 @@
 
 &mem_client_3_size {
 	qcom,peripheral-size = <0x500000>;
+};
+
+&pmi8998_haptics {
+	status = "okay";
+	qcom,wave-play-rate-us = <5000>;
+	qcom,wave-shape = "sine";
+	qcom,vmax-mv = <2830>;
+	qcom,brake-pattern = <0x3 0x2 0x0 0x0>;
 };
 
 &pm8998_vadc {
@@ -776,6 +790,26 @@
 	qcom,led-strings-list = [00 01];
 	qcom,fs-curr-ua = <20000>;
 	qcom,en-cabc;
+};
+
+&red_led { /* Notification LED */
+	qcom,use-blink;
+	qcom,start-idx = <0>;
+	qcom,idx-len = <8>;
+	qcom,duty-pcts = [ 00 0E 1C 2A 38 46 54 64 ];
+	qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
+	qcom,pause-lo = <500>;
+	qcom,pause-hi = <500>;
+	qcom,ramp-step-ms = <50>;
+	linux,name = "white";
+};
+
+&blue_led { /* Left button backlight */
+	linux,name = "button-backlight";
+};
+
+&green_led { /* Right button backlight */
+	linux,name = "button-backlight1";
 };
 
 &pmi8998_charger {

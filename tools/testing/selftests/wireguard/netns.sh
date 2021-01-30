@@ -342,13 +342,9 @@ ip1 -6 rule add table main suppress_prefixlength 0
 ip1 -4 route add default dev wg0 table 51820
 ip1 -4 rule add not fwmark 51820 table 51820
 ip1 -4 rule add table main suppress_prefixlength 0
-# suppress_prefixlength only got added in 3.12, and we want to support 3.10+.
-if [[ $(ip1 -4 rule show all) == *suppress_prefixlength* ]]; then
-	# Flood the pings instead of sending just one, to trigger routing table reference counting bugs.
-	n1 ping -W 1 -c 100 -f 192.168.99.7
-	# ca7a03c got ported to 5.2 when it shouldn't have.
-	[[ $(< /proc/version) =~ ^Linux\ version\ 5\.2[.\ ] ]] || n1 ping -W 1 -c 100 -f abab::1111
-fi
+# Flood the pings instead of sending just one, to trigger routing table reference counting bugs.
+n1 ping -W 1 -c 100 -f 192.168.99.7
+n1 ping -W 1 -c 100 -f abab::1111
 
 # Have ns2 NAT into wg0 packets from ns0, but return an icmp error along the right route.
 n2 iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -d 192.168.241.0/24 -j SNAT --to 192.168.241.2
